@@ -1,5 +1,5 @@
-import { Controller, Delete, Get, Logger, Param, Patch, Post } from "@nestjs/common";
-import { GetMoviesParams } from "./movie.dto";
+import { Body, Controller, Delete, Get, Logger, Param, Patch, Post } from "@nestjs/common";
+import { GetMoviesParams, MovieIdParam, MovieObject } from "./movie.dto";
 import { MovieUtils } from "./movie.utils";
 
 @Controller("/movie")
@@ -20,17 +20,17 @@ export class MovieController{
     }
 
     @Post("/movie")
-    async createMovie(){
-
+    async createMovie(@Body() movie:MovieObject){
+        return this.movieUtils.addMovie(movie);
     }
 
     @Delete("/movie/:id")
-    async deleteMovie(){
-        
+    async deleteMovie(@Param() movieIdParam:MovieIdParam){
+        return this.movieUtils.deleteMovie(movieIdParam.id);
     }
 
-    @Patch("/movie/:id")
-    async updateMovie(){
-        
+    @Patch("/movie")
+    async updateMovie(@Body() movie:MovieObject){
+        return this.movieUtils.updateMovie(movie);
     }
 }

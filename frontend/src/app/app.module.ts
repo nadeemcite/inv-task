@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { HotTableModule } from '@handsontable/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { MovieModule } from './movie/movie.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MovieModule } from './movie/movie.module';
     AppRoutingModule,
     HttpClientModule,
     HotTableModule,
-    MovieModule
+    MovieModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

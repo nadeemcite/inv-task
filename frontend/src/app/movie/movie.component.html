@@ -1,6 +1,3 @@
-<hot-table
-  [colHeaders]="true"
-  [rowHeaders]="true"
-  [data]="movies"
-  licenseKey="non-commercial-and-evaluation">
-</hot-table>
+<hot-table [hotId]="id" [settings]="hotSettings" [data]="movies"> </hot-table>
+
+<button (click)="addNewMovie()">Add New Movie</button>

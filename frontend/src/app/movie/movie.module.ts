@@ -4,6 +4,8 @@ import { MovieComponent } from './movie.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { HotTableModule } from '@handsontable/angular';
+import { MovieFormDialogComponent } from './movie-form-dialog/movie-form-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
   {
@@ -13,9 +15,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), HotTableModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    HotTableModule,
+    MatDialogModule,
+  ],
   exports: [],
-  declarations: [MovieComponent],
+  declarations: [MovieComponent, MovieFormDialogComponent],
   providers: [],
 })
 export class MovieModule {}

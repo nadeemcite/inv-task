@@ -12,3 +12,14 @@ export class MovieIdParam {
   @IsNotEmpty()
   id: number;
 }
+
+export class MovieObject{
+
+  id:number;
+
+  @IsNotEmpty()
+  original_title:string;
+
+  @IsNotEmpty()
+  meta_data:object;
+}
