@@ -1,0 +1,39 @@
+version: '3'
+services: 
+  
+  # inv-task-fe:
+  #   build:
+  #     context: ./frontend
+  #   ports:
+  #     - 4200:4200
+  #   depends_on:
+  #     - inv-task-be
+  
+  inv-task-be:
+    build:
+      context: ./backend
+    volumes:
+      - /app/node_modules
+      - ./backend/:/app:delegated
+      - ./archive/:/archive
+    environment: 
+      - DB_HOST=inv-task-db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=root
+      - DB_DATABASE=inv
+      - PRODUCTION=false
+    ports:
+      - 4201:3000
+    depends_on:
+      - inv-task-db
+
+  inv-task-db:
+    image: postgres:11-alpine
+    environment: 
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=inv
+    volumes: 
+      - ./etc/db:/var/lib/postgresql/data:rw
+    ports:
+      - 5433:5432
+    container_name: inv-task-db
