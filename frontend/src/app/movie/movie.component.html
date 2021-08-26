@@ -1,3 +1,18 @@
 <hot-table [hotId]="id" [settings]="hotSettings" [data]="movies"> </hot-table>
+<div class="ctrl-panel">
+    <button mat-mini-fab  (click)="home()" [disabled]="currentPage==0">
+        <mat-icon>home</mat-icon>
+    </button>
+    <button mat-mini-fab  (click)="previous()" [disabled]="currentPage==0">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button mat-mini-fab  (click)="next()" >
+        <mat-icon>arrow_forward</mat-icon>
+    </button>
+    <span>Current Page: {{currentPage+1}}</span>
+</div>
 
-<button (click)="addNewMovie()">Add New Movie</button>
+
+<button mat-fab class="fab-button"  (click)="addNewMovie()">
+    <mat-icon>add</mat-icon>
+</button>

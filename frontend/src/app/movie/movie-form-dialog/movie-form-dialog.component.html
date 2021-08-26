@@ -1,0 +1,28 @@
+<form [formGroup]="movieForm" (ngSubmit)="movieForm.valid && submitMovieForm()">
+    <div>
+        <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="original_title"/>
+          </mat-form-field>
+    </div>
+    <div formGroupName="meta_data">
+        <div>
+            <mat-form-field>
+                <mat-label>Budget</mat-label>
+                <input matInput formControlName="budget" type="number"/>
+              </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Vote Average</mat-label>
+                <input matInput formControlName="vote_average" type="number"/>
+              </mat-form-field>
+        </div>
+    </div>
+    <div>
+        <button type="submit" mat-raised-button color="primary">Submit</button>
+        <button *ngIf="data.movie" type="button" mat-raised-button color="accent" (click)="deleteMovie()">Delete</button>
+        <button type="button" mat-raised-button color="warn" (click)="closeDialog()">Close</button>
+    </div>
+  
+</form>

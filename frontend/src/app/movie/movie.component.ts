@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HotTableRegisterer } from '@handsontable/angular';
 import Handsontable from 'handsontable';
 import { MOVIE_PERSONALIZATION } from '../models/constants';
@@ -8,6 +8,7 @@ import { MovieService } from '../services/movie.service';
 import { MovieFormDialogComponent } from './movie-form-dialog/movie-form-dialog.component';
 
 interface CustomMovie {
+  id?: number;
   title: string;
   vote_average: string;
   budget: number;
@@ -20,12 +21,10 @@ interface CustomMovie {
   providers: [MovieService],
 })
 export class MovieComponent implements OnInit {
-
-
   id = 'hot-table';
   movies: CustomMovie[] = [];
   currentPage = 0;
-  maximumRecords = 10;
+  maximumRecords = 20;
   columnSettings: any[] = [];
   private hotRegisterer = new HotTableRegisterer();
 
@@ -35,8 +34,18 @@ export class MovieComponent implements OnInit {
     height: 'auto',
     manualColumnResize: true,
     licenseKey: 'non-commercial-and-evaluation',
-
-    afterColumnResize: (newSize, column) => {
+    afterOnCellMouseDown: (event, coords) => {
+      if(coords.row>=0){
+        const dialogRef = this.dialog.open(MovieFormDialogComponent, {
+          data: {
+            movie: this.movies[coords.row],
+          },
+        });
+        this.setUpDailogClose(dialogRef);
+      }
+      
+    },
+    afterColumnResize: () => {
       this.setPersonalizations();
     },
     afterColumnMove: () => {
@@ -44,6 +53,7 @@ export class MovieComponent implements OnInit {
     },
     dragToScroll: true,
     manualColumnMove: true,
+    dropdownMenu: ['alignment'],
   };
 
   constructor(private movieService: MovieService, private dialog: MatDialog) {}
@@ -58,12 +68,12 @@ export class MovieComponent implements OnInit {
       .subscribe((movies) => {
         this.movies = movies.map((movie) => {
           return {
+            id: movie.id,
             title: movie.original_title,
             budget: movie.meta_data.budget,
             vote_average: movie.meta_data.vote_average,
           };
         });
-        
         setTimeout(() => {
           const personalization: any = this.getPersonalizationObj();
           if (personalization.indexSequence) {
@@ -82,9 +92,10 @@ export class MovieComponent implements OnInit {
       });
   }
   addNewMovie() {
-    this.dialog.open(MovieFormDialogComponent, {
+    const dialogRef = this.dialog.open(MovieFormDialogComponent, {
       data: {},
     });
+    this.setUpDailogClose(dialogRef);
   }
   resizeColumn(event: any) {
     console.log(event);
@@ -125,5 +136,29 @@ export class MovieComponent implements OnInit {
       .columnIndexMapper.getIndexesSequence();
     personalization.widths = this.getColumnWidths();
     this.setPersonalizationObj(personalization);
+  }
+
+  setUpDailogClose(formDialog: MatDialogRef<MovieFormDialogComponent>) {
+    formDialog.afterClosed().subscribe((action) => {
+      switch (action) {
+        case 'cancel':
+          break;
+        default:
+          this.currentPage = 0;
+          this.fetchMovies();
+      }
+    });
+  }
+  previous(){
+    this.currentPage--;
+    this.fetchMovies();
+  }
+  next(){
+    this.currentPage++;
+    this.fetchMovies();
+  }
+  home(){
+    this.currentPage=0;
+    this.fetchMovies();
   }
 }
